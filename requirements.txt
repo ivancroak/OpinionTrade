@@ -1,0 +1,20 @@
+# Opinion Trade Bot Dependencies
+
+# Opinion CLOB SDK - for trading on Opinion.trade
+opinion_clob_sdk
+
+# YAML config file support
+PyYAML>=6.0
+
+# HTTP requests (for any direct API calls)
+requests>=2.28.0
+
+# Better console output with colors
+colorama>=0.4.6
+
+# Web3 for blockchain interactions (may be needed by SDK)
+web3>=6.0.0
+
+# For proxy support in HTTP requests
+requests[socks]>=2.28.0
+PySocks>=1.7.1

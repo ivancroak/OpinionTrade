@@ -1,0 +1,21 @@
+# ===========================================
+# WALLETS FILE
+# ===========================================
+#
+# Instructions:
+# 1. Copy this file to: wallets.txt (remove .example)
+# 2. Replace the example keys below with your real private keys
+# 3. NEVER share this file or commit it to git!
+#
+# Format: wallet_number, private_key
+# - wallet_number: any integer (1, 2, 3, etc.)
+# - private_key: your 64-character hex key (with or without 0x prefix)
+#
+# Example:
+# 1, 0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+# 2, abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567891
+#
+# ===========================================
+
+1, 0x0000000000000000000000000000000000000000000000000000000000000001
+2, 0x0000000000000000000000000000000000000000000000000000000000000002

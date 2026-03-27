@@ -1,0 +1,60 @@
+# ===========================================
+# CRITICAL: Never commit private keys!
+# ===========================================
+
+# Input data folder contains sensitive wallet info
+input_data/wallets.txt
+input_data/proxies.txt
+
+# Keep example files tracked (they have no real data)
+!input_data/*.example
+
+# ===========================================
+# Python
+# ===========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# ===========================================
+# IDE / Editor
+# ===========================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===========================================
+# Logs (optional - you may want to keep these)
+# ===========================================
+logs/*.log
+
+# ===========================================
+# Environment files (if any)
+# ===========================================
+.env
+.env.local

@@ -1,0 +1,41 @@
+# ===========================================
+# Opinion Trade Bot Configuration
+# ===========================================
+# Authentication: Uses SIWE (Sign-In With Ethereum)
+# No API key needed - just your private key in wallets.txt
+
+# Network settings
+network:
+  chain_id: 56                                    # BNB Chain Mainnet
+  rpc_url: "https://bsc-dataseed.binance.org"    # Public BSC RPC (you can change to your own)
+  host: "https://proxy.opinion.trade:8443"       # Opinion.trade API endpoint
+
+# Market discovery filters
+market_filters:
+  min_24h_volume: 100          # Minimum 24h volume in USDT to consider a market "active"
+  min_open_interest: 0         # Minimum open interest (0 = no filter)
+  top_n_by_volume: 10          # How many markets to show in "top by volume" list
+  top_n_by_low_oi: 10          # How many markets to show in "lowest open interest" list
+
+# Trading settings
+trading:
+  poll_interval_seconds: 2     # How often to check orderbook (in seconds)
+  default_tick_offset: 10      # Default n value (price = best_bid - n * tick_size)
+                               # tick_size = 0.001 (0.1¢), so n=10 means 1¢ below best bid
+  default_order_size_usdt: 100  # Default order size in USDT
+  max_open_orders: 1           # Maximum open orders across all markets (safety limit)
+
+# Order size modes
+# You'll choose one of these at runtime:
+#   "fixed"      = use a fixed USDT amount
+#   "percentage" = use a percentage of wallet balance
+order_size:
+  mode: "fixed"                # "fixed" or "percentage"
+  fixed_amount: 100             # USDT amount when mode is "fixed"
+  percentage: 2                # Wallet % when mode is "percentage"
+
+# Logging
+logging:
+  level: "INFO"                # DEBUG, INFO, WARNING, ERROR
+  log_to_file: true            # Also save logs to logs/ folder
+  log_file_prefix: "bot"       # Log files will be named: bot_2024-01-15.log

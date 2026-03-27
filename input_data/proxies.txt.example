@@ -1,0 +1,15 @@
+# PROXIES FILE (OPTIONAL)
+#
+# Format: wallet_number, ip:port:username:password
+#
+# Examples:
+# 1, 123.45.67.89:8080:myuser:mypass
+# 2, 98.76.54.32:3128:myuser:mypass
+# 3, proxy.example.com:8080:myuser:mypass
+#
+# The wallet_number must match a wallet in wallets.txt
+# Wallets without a proxy entry will connect directly (no proxy)
+# If you don't need proxies, delete this file or leave it empty
+
+# 1, 123.45.67.89:8080:myuser:mypass
+# 2, 98.76.54.32:3128:myuser:mypass
