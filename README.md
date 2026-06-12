@@ -159,3 +159,9 @@ This software interacts with real financial markets and trades real assets. Use 
 ## License
 
 MIT
+
+## Author
+
+**Ivan Rykovski** — [GitHub](https://github.com/ivancroak) · [LinkedIn](https://www.linkedin.com/in/ivan-rykovski)
+
+Developed privately during 2025–2026; published as a snapshot release in March 2026.
