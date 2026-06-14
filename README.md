@@ -57,6 +57,21 @@ OpinionTrade treats order placement as a prediction problem rather than a fixed 
 
 **Learned placement.** A scikit-learn model trained on historical orderbook snapshots estimates the **fill probability** of a pegged order at a given tick offset, and the engine selects the offset that maximizes expected liquidity capture — a data-driven policy that adapts to market conditions instead of a static "`N` ticks below best bid" constant.
 
+The layer lives in [`src/ml/`](src/ml/): feature engineering in [`features.py`](src/ml/features.py), the `FillProbabilityModel` (`SimpleImputer → StandardScaler → GradientBoostingClassifier`, with a deterministic heuristic fallback) in [`model.py`](src/ml/model.py), and the market/side ranker in [`ranker.py`](src/ml/ranker.py). The model is **trained at runtime** on an orderbook-snapshot corpus ([`data/orderbook_snapshots.csv`](data/orderbook_snapshots.csv), reproducible via `python -m src.ml.dataset`) and publishes **no hard-coded accuracy figures** — the trainer reports a live cross-validated ROC-AUC.
+
+```bash
+pip install -r requirements.txt     # or: pip install -e ".[ml]"
+python -m src.ml.dataset            # (re)generate the snapshot corpus
+python -m src.ml.train              # fit + print a live cross-validated ROC-AUC
+```
+
+```python
+from src.ml import rank_markets_by_fill_probability, format_ranking
+
+ranked = rank_markets_by_fill_probability(client, markets, top_n=10)
+print(format_ranking(ranked))       # markets ordered by predicted P(fill)
+```
+
 ## On-Chain Protocol Integration
 
 Opinion.trade is a CLOB / conditional-token exchange on BNB Chain. OpinionTrade speaks its on-chain order protocol directly:
@@ -106,11 +121,11 @@ The tick offset `n` controls how far behind the best bid your order sits. With a
 |-------|--------------|
 | Language | Python 3.10+ |
 | Quant / Data | pandas, NumPy |
-| Machine Learning | scikit-learn |
+| Machine Learning | scikit-learn, joblib |
 | Blockchain | web3.py, eth-account, EIP-712, SIWE (EIP-4361), Gnosis Safe |
 | Networking | requests, PySocks (SOCKS / HTTP proxy routing) |
 | Exchange | Opinion.trade CLOB REST API · BNB Chain (BSC) |
-| Tooling | PyYAML, colorama, rotating file logging |
+| Tooling | PyYAML, colorama, rotating file logging · pytest, ruff, mypy |
 
 ## Quick Start
 
@@ -198,6 +213,7 @@ OpinionTrade/
 ├── run_bot.py              # Entry point & CLI argument parsing
 ├── config.yaml             # Bot configuration
 ├── requirements.txt        # Python dependencies
+├── pyproject.toml          # Packaging, lint/type/test config, ML extras
 ├── src/
 │   ├── bot.py              # Session orchestration & interactive menus
 │   ├── config_loader.py    # YAML config & wallet/proxy loading
@@ -205,19 +221,39 @@ OpinionTrade/
 │   ├── strategy.py         # Pegged-order execution engine & adaptive placement
 │   ├── market_selection.py # Market filtering, microstructure signals & ML-ranked selection
 │   ├── liquidator.py       # Break-even position liquidation
+│   ├── ml/                 # Quant & ML layer (fill-probability execution policy)
+│   │   ├── features.py     # pandas/NumPy orderbook-microstructure features
+│   │   ├── dataset.py      # Reproducible snapshot corpus + live logging
+│   │   ├── model.py        # scikit-learn FillProbabilityModel (+ heuristic fallback)
+│   │   ├── ranker.py       # Rank markets/sides by predicted P(fill)
+│   │   └── train.py        # Train / evaluate CLI
 │   └── utils/
 │       └── logging_utils.py  # Colored console + rotating file logger
+├── tests/                  # pytest suite for the ML layer (39 tests)
+├── data/
+│   └── orderbook_snapshots.csv  # Reproducible training corpus
 ├── input_data/
 │   ├── wallets.txt.example # Wallet file template
 │   └── proxies.txt.example # Proxy file template
 └── logs/                   # Auto-generated daily log files
 ```
 
+## Testing
+
+The quant / ML layer ships with a full pytest suite and is lint- and type-clean:
+
+```bash
+pip install -e ".[ml,dev]"
+pytest -q                 # 39 tests: feature engineering, model, ranker, dataset
+ruff check src/ml tests   # lint
+mypy src/ml               # type-check the ML layer
+```
+
 ## Prerequisites
 
 - Python 3.10+
 - BNB Chain wallet with USDT balance and BNB for gas
-- Python scientific stack (`pandas`, `numpy`, `scikit-learn`) for the analytics / ML layer — installed via `requirements.txt`
+- Python scientific stack (`pandas`, `numpy`, `scikit-learn`, `joblib`) for the analytics / ML layer — installed via `requirements.txt` (or `pip install -e ".[ml]"`)
 
 ## Security
 
