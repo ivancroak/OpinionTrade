@@ -58,3 +58,20 @@ logs/*.log
 # ===========================================
 .env
 .env.local
+
+# ===========================================
+# AI assistant / agent tooling (local dev — never commit)
+# ===========================================
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.claude/
+.agents/
+_agents/
+.factory/
+.cursor/
+.cursorrules
+.windsurfrules
+.github/copilot-instructions.md
+.mcp.json
+skills-lock.json
